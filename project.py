@@ -17,6 +17,7 @@ def answer_one():
     return c.fetchall()
     db.close()
 
+
 x = 1
 print('Top 3 most viewed Articles!')
 for i in answer_one():
@@ -35,6 +36,7 @@ def answer_two():
                 """)
     return c.fetchall()
     db.close()
+
 
 y = 1
 
@@ -57,19 +59,19 @@ def answer_three():
                      (to_char(log.time, 'YYYY-MM-DD')) = to_char
                      where log.status != '200 OK' group by to_char,count
                         order by errors desc limit 1;""")
-    except:
+    except Exception:
         db.rollback()
         c.execute("""select vwHitByDate.to_char,vwHitByDate.count,
                      count(log.status) as errors from log join vwHitByDate on
                      (to_char(log.time, 'YYYY-MM-DD')) = to_char
                      where log.status != '200 OK' group by to_char,count
-                        order by errors desc limit 1;""")
+                     order by errors desc limit 1;""")
     return c.fetchall()
     db.close()
 
 
 print('\n \nDate with the failure rate!\n')
 for i in answer_three():
-    print ('On the date ' + i[0] +
-           ' the rate of requests leading to failure was ' +
-           str((i[2]/i[1])*100)[:4] + '%')
+    print('On the date ' + i[0] +
+          ' the rate of requests leading to failure was ' +
+          str((i[2]/i[1])*100)[:4] + '%')
