@@ -130,6 +130,7 @@ The authors table includes information about the authors of articles.
 The articles table includes the articles themselves.
 The log table includes one entry for each time a user has accessed the site.
 As you explore the data, you may find it useful to take notes! Don't try to memorize all the columns. Instead, write down a description of the column names and what kind of values are found in those columns.
+
 ===============================
 Step 3).
 ===============================
