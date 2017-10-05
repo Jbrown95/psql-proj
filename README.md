@@ -2,6 +2,7 @@ The scope of this project is to answer 3 questions with a given database.
 1. What are the most popular three articles of all time? Which articles have been accessed the most? Present this information as a sorted list with the most popular article at the top.
 2. Who are the most popular article authors of all time? That is, when you sum up all of the articles each author has written, which authors get the most page views? Present this as a sorted list with the most popular author at the top.
 3. On which days did more than 1% of requests lead to errors? The log table includes a column status that indicates the HTTP status code that the news site sent to the user's browser. (Refer back to this lesson if you want to review the idea of HTTP status codes.)
+
 ===============================
 Step 1). Follow theses instructions given in the course to setup your system.
 ===============================
@@ -90,6 +91,7 @@ If you're getting a specific textual error message, try looking it up on your fa
 
 If all else fails, try an older version.
 Udacity mentors have noticed that some newer versions of Vagrant don't work on all operating systems. Version 1.9.2 is reported to be stabler on some systems, and version 1.9.1 is the supported version on Ubuntu 17.04. You can download older versions of Vagrant from the Vagrant releases index(https://releases.hashicorp.com/vagrant/).
+
 ===============================
 Step 2). The next step is still from the course, follow the following instructions.
 ===============================
