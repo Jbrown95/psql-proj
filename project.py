@@ -17,6 +17,7 @@ def connect_to_db(database_name):
         sys.exit(1)  # The easier method
         # OR perhaps throw an error
 
+
 def get_query_results(db, c, query):
     c.execute(query)
     results = c.fetchall()
@@ -33,6 +34,7 @@ def answer_one(db, c):
 
     return get_query_results(db, c, query_str)
 
+
 def answer_two(db, c):
 
     query_str = """select authors.name,count(log.path)
@@ -42,6 +44,7 @@ def answer_two(db, c):
                 """
 
     return get_query_results(db, c, query_str)
+
 
 def answer_three(db, c):
     query_str = """select vwHitByDate.to_char,vwHitByDate.count,
@@ -72,7 +75,8 @@ if __name__ == '__main__':
     x = 1
     print('Top 3 most viewed Articles!')
     for i in answer_one(db, c):
-        print(str(x) + ': Article: ' + i[0] + '. Views: ' + str(i[1]))
+        print("{}: Article: {}. Views: {}".format(x, i[0], i[1]))
+        # print(str(x) + ': Article: ' + i[0] + '. Views: ' + str(i[1]))
         x += 1
     # answer_two
     y = 1
