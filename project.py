@@ -1,12 +1,22 @@
-# "Database code" for the DB Forum.
-import time
+#!/usr/local/bin/python
+
 import psycopg2
+import sys
 DBNAME = 'news'
 
-
+def connect_to_db(database_name):
+    """Connect to the PostgreSQL database.  Returns a database connection."""
+    try:
+        db = psycopg2.connect("dbname={}".format(database_name))
+        c = db.cursor()
+        return db, c
+    except psycopg2.Error as e:
+        print("Unable to connect to database")
+        # THEN perhaps exit the program
+        sys.exit(1) # The easier method
+        # OR perhaps throw an error
 def answer_one():
-    db = psycopg2.connect(database=DBNAME)
-    c = db.cursor()
+    db, c = connect_to_db(DBNAME)
     """top 3 articles"""
     c.execute("""select articles.title,count(path) from articles join log
                   on articles.slug = (replace(path,'/article/',''))
@@ -14,9 +24,10 @@ def answer_one():
                   group by articles.title
                   order by count desc limit 3;
                   """)
-    return c.fetchall()
-    db.close()
 
+    results = c.fetchall()
+    db.close()
+    return results
 
 x = 1
 print('Top 3 most viewed Articles!')
@@ -26,17 +37,17 @@ for i in answer_one():
 
 
 def answer_two():
-    db = psycopg2.connect(database=DBNAME)
-    c = db.cursor()
+    db, c = connect_to_db(DBNAME)
     """top authors"""
     c.execute("""select authors.name,count(log.path)
                from authors,articles,log where authors.id = articles.author
                and articles.slug = (replace(log.path,'/article/',''))
                group by authors.name order by count(log.path) desc limit 4;
                 """)
-    return c.fetchall()
-    db.close()
 
+    results = c.fetchall()
+    db.close()
+    return results
 
 y = 1
 
@@ -47,27 +58,26 @@ for i in answer_two():
 
 
 def answer_three():
-    db = psycopg2.connect(database=DBNAME)
-    c = db.cursor()
+    db, c = connect_to_db(DBNAME)
+
     """next question"""
     try:
         c.execute("""create view vwHitByDate as select
                      (to_char(time, 'YYYY-MM-DD')),count(status)
                      from log group by to_char;""")
-        c.execute("""select vwHitByDate.to_char,vwHitByDate.count,
-                     count(log.status) as errors from log join vwHitByDate on
-                     (to_char(log.time, 'YYYY-MM-DD')) = to_char
-                     where log.status != '200 OK' group by to_char,count
-                        order by errors desc limit 1;""")
+
     except Exception:
         db.rollback()
-        c.execute("""select vwHitByDate.to_char,vwHitByDate.count,
-                     count(log.status) as errors from log join vwHitByDate on
-                     (to_char(log.time, 'YYYY-MM-DD')) = to_char
-                     where log.status != '200 OK' group by to_char,count
-                     order by errors desc limit 1;""")
-    return c.fetchall()
+
+    c.execute("""select vwHitByDate.to_char,vwHitByDate.count,
+                 count(log.status) as errors from log join vwHitByDate on
+                 (to_char(log.time, 'YYYY-MM-DD')) = to_char
+                 where log.status != '200 OK' group by to_char,count
+                 order by errors desc limit 1;""")
+
+    results = c.fetchall()
     db.close()
+    return results
 
 
 print('\n \nDate with the failure rate!\n')
